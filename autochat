@@ -1,0 +1,259 @@
+local Players = game:GetService("Players")
+local TextChatService = game:GetService("TextChatService")
+local player = Players.LocalPlayer
+
+-- Criar a ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "AutoChatGUI"
+screenGui.Parent = player:FindFirstChild("PlayerGui")
+
+-- Criar o Frame principal
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(0, 250, 0, 170)
+mainFrame.Position = UDim2.new(0.5, -125, 0.2, 0)
+mainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+mainFrame.BorderSizePixel = 0
+mainFrame.Parent = screenGui
+
+-- Criar UI Corner para arredondar os cantos
+local uiCorner = Instance.new("UICorner")
+uiCorner.CornerRadius = UDim.new(0, 10)
+uiCorner.Parent = mainFrame
+
+-- Criar a barra superior para arrastar
+local dragBar = Instance.new("Frame")
+dragBar.Size = UDim2.new(1, 0, 0.3, 0)
+dragBar.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+dragBar.BorderSizePixel = 0
+dragBar.Parent = mainFrame
+
+-- Criar UI Corner para a barra de arrasto
+local dragCorner = Instance.new("UICorner")
+dragCorner.CornerRadius = UDim.new(0, 10)
+dragCorner.Parent = dragBar
+
+-- Criar o título dentro da barra de arrasto
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Size = UDim2.new(1, 0, 1, 0)
+titleLabel.BackgroundTransparency = 1
+titleLabel.Text = "📝 AutoChat"
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleLabel.Font = Enum.Font.SourceSansBold
+titleLabel.TextSize = 18
+titleLabel.Parent = dragBar
+
+-- Criar o contador de tempo ⏰ 00:00:00
+local timerLabel = Instance.new("TextLabel")
+timerLabel.Size = UDim2.new(1, 0, 0.25, 0)
+timerLabel.Position = UDim2.new(0, 0, 0.3, 0) -- Ajustado para subir um pouco
+timerLabel.BackgroundTransparency = 1
+timerLabel.Text = "⏰ 00:00:00"
+timerLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+timerLabel.Font = Enum.Font.SourceSansBold
+timerLabel.TextSize = 18
+timerLabel.Parent = mainFrame
+
+-- Criar o texto RGB "Created by: DenisBC"
+local creatorLabel = Instance.new("TextLabel")
+creatorLabel.Size = UDim2.new(1, 0, 0.2, 0)
+creatorLabel.Position = UDim2.new(0, 0, 0.53, 0) -- Subiu um pouco
+creatorLabel.BackgroundTransparency = 1
+creatorLabel.Text = "Created by: DenisBC"
+creatorLabel.TextColor3 = Color3.fromRGB(255, 0, 0) -- Começa em vermelho
+creatorLabel.Font = Enum.Font.SourceSansBold
+creatorLabel.TextSize = 16
+creatorLabel.Parent = mainFrame
+
+-- Criar o botão de PAUSE
+local pauseButton = Instance.new("TextButton")
+pauseButton.Size = UDim2.new(0.45, 0, 0.2, 0)
+pauseButton.Position = UDim2.new(0.05, 0, 0.7, 0) -- Subiu um pouco
+pauseButton.BackgroundColor3 = Color3.fromRGB(50, 200, 50)
+pauseButton.Text = "Pause"
+pauseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+pauseButton.Font = Enum.Font.SourceSansBold
+pauseButton.TextSize = 18
+pauseButton.Parent = mainFrame
+
+local pauseCorner = Instance.new("UICorner")
+pauseCorner.CornerRadius = UDim.new(0, 10)
+pauseCorner.Parent = pauseButton
+
+-- Criar o botão de CLOSE
+local closeButton = Instance.new("TextButton")
+closeButton.Size = UDim2.new(0.45, 0, 0.2, 0)
+closeButton.Position = UDim2.new(0.5, 0, 0.7, 0) -- Subiu um pouco
+closeButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+closeButton.Text = "Close"
+closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+closeButton.Font = Enum.Font.SourceSansBold
+closeButton.TextSize = 18
+closeButton.Parent = mainFrame
+
+local closeCorner = Instance.new("UICorner")
+closeCorner.CornerRadius = UDim.new(0, 10)
+closeCorner.Parent = closeButton
+
+-- Função para mudar a cor do texto "Created by: DenisBC" em RGB
+local function efeitoRGB()
+    local r, g, b = 255, 0, 0
+    local passo = 5
+
+    while true do
+        wait(0.1)
+        if r > 0 and b == 0 then
+            r = r - passo
+            g = g + passo
+        elseif g > 0 and r == 0 then
+            g = g - passo
+            b = b + passo
+        elseif b > 0 and g == 0 then
+            b = b - passo
+            r = r + passo
+        end
+        creatorLabel.TextColor3 = Color3.fromRGB(r, g, b)
+    end
+end
+
+task.spawn(efeitoRGB)
+
+-- Adicionando funcionalidade de arrastar a GUI
+local dragging, dragInput, dragStart, startPos
+
+dragBar.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = input.Position
+        startPos = mainFrame.Position
+
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+dragBar.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement then
+        dragInput = input
+    end
+end)
+
+game:GetService("UserInputService").InputChanged:Connect(function(input)
+    if input == dragInput and dragging then
+        local delta = input.Position - dragStart
+        mainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end)
+
+-- Temporizador
+local tempoAtivo = 0
+
+local function formatarTempo(segundos)
+    local horas = math.floor(segundos / 3600)
+    local minutos = math.floor((segundos % 3600) / 60)
+    local segundos = segundos % 60
+    return string.format("⏰ %02d:%02d:%02d", horas, minutos, segundos)
+end
+
+local function atualizarTemporizador()
+    while true do
+        wait(1)
+        tempoAtivo = tempoAtivo + 1
+        timerLabel.Text = formatarTempo(tempoAtivo)
+    end
+end
+
+task.spawn(atualizarTemporizador)
+
+-- Lista de 500 frases fofas para o jogo Adopt Me
+local mensagens = {
+    "Aww, que pet fofinho! 💖",
+    "Esse filhote é muito lindo, quero um igual!",
+    "Eu amo esse brinquedo, ele é tão fofo! 🧸",
+    "Esse lugar é tão encantador, parece um conto de fadas!",
+    "Olha esse pet, ele é meu novo melhor amigo! 🐶",
+    "Que tal brincar de esconde-esconde com nossos pets? 🐱",
+    "Vamo fazer uma festa de adoção, galera! 🎉",
+    "Esse pet me lembra meu bichinho de estimação real 🐾",
+    "O que vcs acham desse pet, ele é fofo né? 🐰",
+    "Eu quero muito um dragãozinho fofo pra mim! 🐉",
+    "Que fofura esse unicórnio, meu sonho é ter um! 🦄",
+    "Vcs já conseguiram o pet raro? Eu tô quase lá! 😍",
+    "Essa roupinha é muito fofa! Vou comprar uma pro meu pet!",
+    "Olha esse pet, ele tem até uma fantasia de astronauta! 🚀",
+    "Esse pet está super feliz, olha a carinha dele! 😸",
+    "Eu adorei o estilo dessa casa! Tão fofa e aconchegante 🏠",
+    "Bora criar uma pet family! 🐾",
+    "Essa roupinha de verão está super estilosa! ☀️",
+    "Meu pet adora essa brinquedoteca! Vamos jogar juntos? 🎮",
+    "Olha, achei um ovo de pet raro! Quem quer ver? 🥚",
+    "Alguém mais tem um pet de arco-íris? Ele é tão brilhante!",
+    "Esse mapa é perfeito para fazer um piquenique com os pets! 🍉",
+    "Gente, o que vcs acharam do novo evento? Eu adorei! 🎊",
+    "Esse pet que eu encontrei é super raro, nunca vi um igual!",
+    "Vamos fazer uma troca de pets, quem tem um pet fofo pra trocar?",
+    "Esse ovo é meu, mas eu vou deixar alguém do grupo pegar! 😇",
+    "Acabei de ganhar um pet raro! Ele é tão lindo, estou apaixonado! 😻",
+    "Amo cuidar dos meus pets, é muito divertido!",
+    "Quem tem um pet dragão aqui? Quero fazer um time com vcs! 🐉",
+    "Eu amei essa área do mapa, cheia de coisas fofas!",
+    "Esse pet com chapéu de festa está simplesmente demais!",
+    "Quem tem pet de brinquedo? Eles são tão fofos!",
+    "Eu adorei o mapa de inverno! Vamos brincar de neve com os pets? ❄️",
+    "Meu pet está querendo muito brincar com vc! Ele adora sociabilidade!",
+    "Vamos visitar a loja de brinquedos, tem muita coisa legal! 🎁",
+    "Esse pet é o mais fofo do jogo, quem concorda?",
+    "Olha esse pet de pelúcia, é tão macio!",
+    "Estou treinando meu pet para ele ser o mais forte do servidor! 💪",
+    "Vamos adotar mais pets juntos! Quanto mais, melhor! 🐶🐱",
+    "Eu amo essa parte do mapa, é tão aconchegante!",
+    "Acho que encontrei o pet perfeito para minha coleção!",
+    "Esse pet com óculos de sol está parecendo um superstar! 😎",
+    "Esse pet é tão legal! Ele tem até uma fantasia de pirata! 🏴‍☠️",
+    "Vou dar um passeio com meu pet agora, quer vir também?",
+    "Esse brinquedo novo é uma maravilha, os pets adoram!",
+    "Tô querendo muito mais pet, alguém tem algum para trocar?",
+    "Esse ovo de pet deve ter algo muito raro dentro! Vamos abrir juntos! 🎉",
+    "Vamos organizar uma competição de pets! Quem topa? 🏆",
+    "Já viu o novo pet da loja? Ele é tão lindo, é de outro mundo! 🌟",
+    "Que tal fazer um desfile de pets? Vai ser super divertido!",
+    "Meu pet está querendo fazer novos amigos, quem quer brincar com ele?",
+    "Eu amo adotar, sempre encontro pets incríveis por aqui!",
+    "Esse pet novo é o mais fofo que eu já vi!",
+    "Se alguém precisar de um pet fofo para adotar, eu tenho vários para dar!",
+    "Eu encontrei o melhor pet do jogo, ele é super raro!",
+    "Pessoal, olhem esse pet, ele é super especial, acho que nunca vi um igual!",
+    "Quem quer brincar de esconde-esconde comigo e com meus pets?",
+    "Esse pet está pedindo muito carinho, vem aqui dar um abraço nele! 🐾",
+    "Eu adoro compartilhar meus pets com os outros!",
+    "Meu pet é o mais rápido de todos, quem quer desafiar ele em uma corrida? 🏁",
+    "Vamos formar um grupo só de pets raros! Quem tem algum?",
+    "Eu sou a maior fã de pets desse jogo, eles são incríveis!",
+    "Eu adoro levar meus pets para dar uma volta no mapa, eles amam explorar!",
+    "Que tal decorarmos a casa para nossos pets? Vai ficar muito fofo!",
+    "Eu adoro quando meu pet ganha um presente! Ele sempre fica tão feliz!",
+    "Quem tem um pet de arco-íris para mostrar? Eles são tão incríveis!",
+    "Acabei de ganhar um ovo de pet raro, vou incubar agora! 🎁",
+    "Esse pet está super animado, vamos fazer uma corrida!",
+    "Essa roupinha é muito fofa, combina perfeitamente com meu pet!",
+    "Vamos explorar todos os cantinhos do mapa com nossos pets!",
+    "Esses ovos de pet raros são muito difíceis de encontrar, vamos tentar juntos!",
+    "Meus pets adoram se vestir, vou dar uma nova roupinha para todos!",
+    "Alguém tem um pet épico para mostrar? Eu estou louco para ver!",
+    "Amo como meu pet fica feliz sempre que ganha um brinquedo novo! 🎉",
+    "Esses pets são tão fofos que eu quero adotar todos!",
+    "Estou criando a maior coleção de pets aqui, vem conferir!",
+    "Esse pet está super animado para brincar, vem junto também!",
+    "Vamos fazer uma festa com nossos pets, quem vem?",
+    "Meu pet está tão feliz que é impossível não sorrir ao ver ele!",
+    "O mapa está perfeito para fazer um piquenique com os pets, alguém mais?",
+    "Eu adoro quando a gente encontra novos amigos para os nossos pets!",
+    "Eu adoro trocar pets com os amigos, sempre é uma surpresa!",
+    "Quem mais adora pets raros? Eu sou fã!",
+    "Vou criar uma galeria de pets, quem tem um pet raro para mostrar?",
+    "Esse brinquedo é muito divertido! Meus pets não param de brincar!",
+    "Que tal fazermos um desfile de pets raros? Vai ser incrível!",
+    "Eu sempre sonho com novos pets para adotar, eles são demais!"
+}
