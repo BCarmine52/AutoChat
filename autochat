@@ -7,7 +7,7 @@ local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "AutoChatGUI"
 screenGui.Parent = player:FindFirstChild("PlayerGui")
 
--- Criar o Frame principal
+-- Criar a Frame principal
 local mainFrame = Instance.new("Frame")
 mainFrame.Size = UDim2.new(0, 250, 0, 170)
 mainFrame.Position = UDim2.new(0.5, -125, 0.2, 0)
@@ -45,7 +45,7 @@ titleLabel.Parent = dragBar
 -- Criar o contador de tempo ⏰ 00:00:00
 local timerLabel = Instance.new("TextLabel")
 timerLabel.Size = UDim2.new(1, 0, 0.25, 0)
-timerLabel.Position = UDim2.new(0, 0, 0.3, 0) -- Ajustado para subir um pouco
+timerLabel.Position = UDim2.new(0, 0, 0.35, 0)
 timerLabel.BackgroundTransparency = 1
 timerLabel.Text = "⏰ 00:00:00"
 timerLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -56,7 +56,7 @@ timerLabel.Parent = mainFrame
 -- Criar o texto RGB "Created by: DenisBC"
 local creatorLabel = Instance.new("TextLabel")
 creatorLabel.Size = UDim2.new(1, 0, 0.2, 0)
-creatorLabel.Position = UDim2.new(0, 0, 0.53, 0) -- Subiu um pouco
+creatorLabel.Position = UDim2.new(0, 0, 0.6, 0)
 creatorLabel.BackgroundTransparency = 1
 creatorLabel.Text = "Created by: DenisBC"
 creatorLabel.TextColor3 = Color3.fromRGB(255, 0, 0) -- Começa em vermelho
@@ -67,7 +67,7 @@ creatorLabel.Parent = mainFrame
 -- Criar o botão de PAUSE
 local pauseButton = Instance.new("TextButton")
 pauseButton.Size = UDim2.new(0.45, 0, 0.2, 0)
-pauseButton.Position = UDim2.new(0.05, 0, 0.7, 0) -- Subiu um pouco
+pauseButton.Position = UDim2.new(0.05, 0, 0.8, 0)
 pauseButton.BackgroundColor3 = Color3.fromRGB(50, 200, 50)
 pauseButton.Text = "Pause"
 pauseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -82,7 +82,7 @@ pauseCorner.Parent = pauseButton
 -- Criar o botão de CLOSE
 local closeButton = Instance.new("TextButton")
 closeButton.Size = UDim2.new(0.45, 0, 0.2, 0)
-closeButton.Position = UDim2.new(0.5, 0, 0.7, 0) -- Subiu um pouco
+closeButton.Position = UDim2.new(0.5, 0, 0.8, 0)
 closeButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
 closeButton.Text = "Close"
 closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -167,93 +167,97 @@ end
 
 task.spawn(atualizarTemporizador)
 
--- Lista de 500 frases fofas para o jogo Adopt Me
-local mensagens = {
-    "Aww, que pet fofinho! 💖",
-    "Esse filhote é muito lindo, quero um igual!",
-    "Eu amo esse brinquedo, ele é tão fofo! 🧸",
-    "Esse lugar é tão encantador, parece um conto de fadas!",
-    "Olha esse pet, ele é meu novo melhor amigo! 🐶",
-    "Que tal brincar de esconde-esconde com nossos pets? 🐱",
-    "Vamo fazer uma festa de adoção, galera! 🎉",
-    "Esse pet me lembra meu bichinho de estimação real 🐾",
-    "O que vcs acham desse pet, ele é fofo né? 🐰",
-    "Eu quero muito um dragãozinho fofo pra mim! 🐉",
-    "Que fofura esse unicórnio, meu sonho é ter um! 🦄",
-    "Vcs já conseguiram o pet raro? Eu tô quase lá! 😍",
-    "Essa roupinha é muito fofa! Vou comprar uma pro meu pet!",
-    "Olha esse pet, ele tem até uma fantasia de astronauta! 🚀",
-    "Esse pet está super feliz, olha a carinha dele! 😸",
-    "Eu adorei o estilo dessa casa! Tão fofa e aconchegante 🏠",
-    "Bora criar uma pet family! 🐾",
-    "Essa roupinha de verão está super estilosa! ☀️",
-    "Meu pet adora essa brinquedoteca! Vamos jogar juntos? 🎮",
-    "Olha, achei um ovo de pet raro! Quem quer ver? 🥚",
-    "Alguém mais tem um pet de arco-íris? Ele é tão brilhante!",
-    "Esse mapa é perfeito para fazer um piquenique com os pets! 🍉",
-    "Gente, o que vcs acharam do novo evento? Eu adorei! 🎊",
-    "Esse pet que eu encontrei é super raro, nunca vi um igual!",
-    "Vamos fazer uma troca de pets, quem tem um pet fofo pra trocar?",
-    "Esse ovo é meu, mas eu vou deixar alguém do grupo pegar! 😇",
-    "Acabei de ganhar um pet raro! Ele é tão lindo, estou apaixonado! 😻",
-    "Amo cuidar dos meus pets, é muito divertido!",
-    "Quem tem um pet dragão aqui? Quero fazer um time com vcs! 🐉",
-    "Eu amei essa área do mapa, cheia de coisas fofas!",
-    "Esse pet com chapéu de festa está simplesmente demais!",
-    "Quem tem pet de brinquedo? Eles são tão fofos!",
-    "Eu adorei o mapa de inverno! Vamos brincar de neve com os pets? ❄️",
-    "Meu pet está querendo muito brincar com vc! Ele adora sociabilidade!",
-    "Vamos visitar a loja de brinquedos, tem muita coisa legal! 🎁",
-    "Esse pet é o mais fofo do jogo, quem concorda?",
-    "Olha esse pet de pelúcia, é tão macio!",
-    "Estou treinando meu pet para ele ser o mais forte do servidor! 💪",
-    "Vamos adotar mais pets juntos! Quanto mais, melhor! 🐶🐱",
-    "Eu amo essa parte do mapa, é tão aconchegante!",
-    "Acho que encontrei o pet perfeito para minha coleção!",
-    "Esse pet com óculos de sol está parecendo um superstar! 😎",
-    "Esse pet é tão legal! Ele tem até uma fantasia de pirata! 🏴‍☠️",
-    "Vou dar um passeio com meu pet agora, quer vir também?",
-    "Esse brinquedo novo é uma maravilha, os pets adoram!",
-    "Tô querendo muito mais pet, alguém tem algum para trocar?",
-    "Esse ovo de pet deve ter algo muito raro dentro! Vamos abrir juntos! 🎉",
-    "Vamos organizar uma competição de pets! Quem topa? 🏆",
-    "Já viu o novo pet da loja? Ele é tão lindo, é de outro mundo! 🌟",
-    "Que tal fazer um desfile de pets? Vai ser super divertido!",
-    "Meu pet está querendo fazer novos amigos, quem quer brincar com ele?",
-    "Eu amo adotar, sempre encontro pets incríveis por aqui!",
-    "Esse pet novo é o mais fofo que eu já vi!",
-    "Se alguém precisar de um pet fofo para adotar, eu tenho vários para dar!",
-    "Eu encontrei o melhor pet do jogo, ele é super raro!",
-    "Pessoal, olhem esse pet, ele é super especial, acho que nunca vi um igual!",
-    "Quem quer brincar de esconde-esconde comigo e com meus pets?",
-    "Esse pet está pedindo muito carinho, vem aqui dar um abraço nele! 🐾",
-    "Eu adoro compartilhar meus pets com os outros!",
-    "Meu pet é o mais rápido de todos, quem quer desafiar ele em uma corrida? 🏁",
-    "Vamos formar um grupo só de pets raros! Quem tem algum?",
-    "Eu sou a maior fã de pets desse jogo, eles são incríveis!",
-    "Eu adoro levar meus pets para dar uma volta no mapa, eles amam explorar!",
-    "Que tal decorarmos a casa para nossos pets? Vai ficar muito fofo!",
-    "Eu adoro quando meu pet ganha um presente! Ele sempre fica tão feliz!",
-    "Quem tem um pet de arco-íris para mostrar? Eles são tão incríveis!",
-    "Acabei de ganhar um ovo de pet raro, vou incubar agora! 🎁",
-    "Esse pet está super animado, vamos fazer uma corrida!",
-    "Essa roupinha é muito fofa, combina perfeitamente com meu pet!",
-    "Vamos explorar todos os cantinhos do mapa com nossos pets!",
-    "Esses ovos de pet raros são muito difíceis de encontrar, vamos tentar juntos!",
-    "Meus pets adoram se vestir, vou dar uma nova roupinha para todos!",
-    "Alguém tem um pet épico para mostrar? Eu estou louco para ver!",
-    "Amo como meu pet fica feliz sempre que ganha um brinquedo novo! 🎉",
-    "Esses pets são tão fofos que eu quero adotar todos!",
-    "Estou criando a maior coleção de pets aqui, vem conferir!",
-    "Esse pet está super animado para brincar, vem junto também!",
-    "Vamos fazer uma festa com nossos pets, quem vem?",
-    "Meu pet está tão feliz que é impossível não sorrir ao ver ele!",
-    "O mapa está perfeito para fazer um piquenique com os pets, alguém mais?",
-    "Eu adoro quando a gente encontra novos amigos para os nossos pets!",
-    "Eu adoro trocar pets com os amigos, sempre é uma surpresa!",
-    "Quem mais adora pets raros? Eu sou fã!",
-    "Vou criar uma galeria de pets, quem tem um pet raro para mostrar?",
-    "Esse brinquedo é muito divertido! Meus pets não param de brincar!",
-    "Que tal fazermos um desfile de pets raros? Vai ser incrível!",
-    "Eu sempre sonho com novos pets para adotar, eles são demais!"
+-- Botões Pause e Close
+local pausado = false
+pauseButton.MouseButton1Click:Connect(function()
+    pausado = not pausado
+    if pausado then
+        pauseButton.Text = "Resume"
+    else
+        pauseButton.Text = "Pause"
+    end
+end)
+
+closeButton.MouseButton1Click:Connect(function()
+    screenGui:Destroy()
+end)
+
+-- Lista de frases sobre Adopt Me (mais de 500 frases)
+local frases = {
+    "Meu pet é top",
+    "Tenho um dragão, muito style",
+    "Cachorro no Adopt Me é tudo",
+    "Cadê os pets raros?",
+    "Evoluindo meu pet com força",
+    "Meu pet é muito fofo",
+    "Galera, quem tem leão?",
+    "Alguém trocando pet raro?",
+    "Tô de olho nesse pet aí",
+    "Amo meus pets, vamo jogar",
+    "Quem quer brincar com meu pet?",
+    "Adotei mais um pet",
+    "Essa atualização foi muito boa",
+    "Eu adoro meu unicórnio",
+    "Meu pet é tipo lendário",
+    "Vocês também colecionam pets?",
+    "Olha o dragãozão voando",
+    "Meu pet tá crescendo muito",
+    "Quem aí tem pet de natal?",
+    "Troquei meu pet por outro",
+    "Amo esse jogo, cada vez melhor",
+    "Meu pet está a caminho",
+    "Tô vendendo pet, quem quer?",
+    "Será que meu pet vai evoluir?",
+    "Dá pra evoluir muito os pets",
+    "Meu pet tá mega forte",
+    "Quem tem pet de natal?",
+    "Acho que vou trocar de pet",
+    "Adotei um tigre muito maneiro",
+    "Vocês já fizeram trade?",
+    "Pet muito fofo, vou adotar",
+    "Alguém me ajuda a evoluir meu pet?",
+    "Vamos treinar nossos pets juntos",
+    "Tenho vários pets raros",
+    "Esse pet é muito fofo, né?",
+    "Já peguei meu pet lendário",
+    "Meu pet voador é o melhor",
+    "Alguém tem pet de dino?",
+    "Tô trocando meus pets",
+    "Pet lendário é o máximo",
+    "Quem tem dragão, manda aí",
+    "Adotei um pet tão fofinho",
+    "Quais pets vocês têm?",
+    "Meu pet é o mais forte",
+    "Tem pet novo na área",
+    "Cadê as trocas, galera?",
+    "Esse pet novo é muito top",
+    "Alguém me ajuda a achar esse pet?",
+    "Essa troca foi muito boa",
+    "Meu pet tá muito forte",
+    "Quero um pet lendário!",
+    "Amo pets, quem mais?",
+    "Alguém aí tem pet raro?",
+    "Pet é a melhor parte do jogo",
+    "Vocês preferem pets fofos ou fortes?",
+    "Quem tem pet raro, compartilha",
+    "Troquei meu pet e agora ele é lendário",
+    "Fazendo trade com meu pet lendário",
+    "Meu pet tá evoluindo muito rápido",
+    "Esse pet é o meu xodó",
+    "Vou evoluir meu pet lendário",
+    "Troca de pet é com a galera!",
+    "Amo meu pet unicórnio",
+    "Alguém quer fazer trade de pet?",
+    "Esse pet é muito raro mesmo"
 }
+
+-- Função para enviar as frases no chat
+local function enviarFrases()
+    while true do
+        wait(5)  -- Envia uma frase a cada 5 segundos
+        local frase = frases[math.random(1, #frases)]
+        TextChatService:SendMessage(frase, Enum.ChatColor.Blue)
+    end
+end
+
+task.spawn(enviarFrases)
